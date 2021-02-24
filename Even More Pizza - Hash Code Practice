@@ -1,0 +1,50 @@
+fileList = ['a_example', 'b_little_bit_of_everything.in', 'c_many_ingredients.in', 'd_many_pizzas.in', 'e_many_teams.in']
+teamDic = {}
+pizzaDic = {}
+for filename in fileList:
+    file = open(filename, 'r')
+    fileRead = file.readlines()
+    teamDic[filename] = list(map(int,(fileRead[0])[:len(fileRead[0])-2].split()[1:]))
+    pizzaTopings = []
+    for lst in fileRead[1:]:
+        pizzaTopings.append(([lst.split()[0]], lst.split()[1:]))
+    pizzaDic[filename] = int((fileRead[0])[:len(fileRead[0])-2].split()[0]), pizzaTopings
+    
+for item in teamDic.keys():
+    print('File name:', item)
+          
+    twoP = pizzaDic[item][1][:(teamDic[item][0]*2)]
+    threeP = pizzaDic[item][1][(teamDic[item][0]*2):(teamDic[item][0]*2)+(teamDic[item][1]*3)]
+    fourP = pizzaDic[item][1][len(threeP):len(threeP)+(teamDic[item][2]*4)]
+    twoT = []
+    twos = ''
+    for pizza, topings in twoP:
+        for toping in topings:
+            if toping not in twoT:
+                twoT.append(toping)
+        twos = twos +' '+ ' '.join(map(str, pizza))
+    threeT = []
+    threes = ''
+    for pizza, topings in threeP:
+        for toping in topings:
+            if toping not in threeT:
+                threeT.append(toping)
+        threes = threes +' '+ ' '.join(map(str, pizza))
+
+    fourT = []
+    fours = ''
+    for pizza, topings in fourP:
+        for toping in topings:
+            if toping not in fourT:
+                fourT.append(toping)
+        fours = fours +' '+ ' '.join(map(str, pizza))
+
+    deleveries = (teamDic[item][0])+(teamDic[item][1])+(teamDic[item][2])
+    score = len(twoT)*len(twoT)+len(threeT)*len(threeT)+len(fourT)*len(fourT)
+    totalPeople = len(twoP)+len(threeP)+len(fourP)
+
+    content = str(deleveries)+'\n'+'2'+twos+'\n'+'3'+threes+'\n'+'4'+fours
+    newFile = open(item[0], 'w')
+    newFile.write(content)
+    newFile.close()
+    print('People:', totalPeople, 'Pizzas:', len(pizzaDic[item][1]),'\nDeleveries:',deleveries, 'Score:', score)
